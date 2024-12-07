@@ -20,6 +20,13 @@ class LocalBookDataSource {
         BookDatabase.addBook(book)
     }
 
-    //TODO add the updateFunction
+    suspend fun updateBook(book: Book) {
+        delay(500)
+        BookDatabase.updateBook(book)
+    }
 
+    suspend fun deleteBook(id: Int) {
+        delay(500)
+        BookDatabase.deleteBook(id)
+    }
 }
