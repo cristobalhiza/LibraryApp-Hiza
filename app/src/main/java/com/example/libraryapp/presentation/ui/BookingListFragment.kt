@@ -17,6 +17,7 @@ import com.example.libraryapp.presentation.viewmodel.BookListViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import androidx.navigation.fragment.findNavController
 
 class BookingListFragment : Fragment(R.layout.fragment_booking_list) {
 
@@ -57,7 +58,9 @@ class BookingListFragment : Fragment(R.layout.fragment_booking_list) {
 
     private fun setupRecyclerView() {
         bookAdapter = BookAdapter { book ->
-            // Navegar al detalle usando Navigation Component pasar el id
+            val action = BookingListFragmentDirections
+                .actionBookingListFragmentToBookingDetailFragment(book.id)
+            findNavController().navigate(action)
         }
         binding.recyclerView.apply {
             adapter = bookAdapter
@@ -76,7 +79,16 @@ class BookingListFragment : Fragment(R.layout.fragment_booking_list) {
             .setView(dialogBinding.root)
             .setPositiveButton("Add") { _, _ ->
                 with(dialogBinding) {
-                   //TODO call the function that add a new book
+                    val title = titleInput.text.toString()
+                    val author = authorInput.text.toString()
+                    val year = yearInput.text.toString().toIntOrNull() ?: 0
+                    val description = descriptionInput.text.toString()
+
+                    if (title.isNotBlank() && author.isNotBlank() && year > 0) {
+                        viewModel.addBook(title, author, year, description)
+                    } else {
+                        Snackbar.make(root, "Please fill all fields", Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
             .setNegativeButton("Cancel", null)
@@ -87,5 +99,4 @@ class BookingListFragment : Fragment(R.layout.fragment_booking_list) {
         super.onDestroyView()
         _binding = null
     }
-
 }

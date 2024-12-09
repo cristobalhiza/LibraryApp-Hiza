@@ -4,7 +4,7 @@ import com.example.libraryapp.data.repository.BookRepositoryProvider
 import com.example.libraryapp.domain.model.Book
 import com.example.libraryapp.domain.repository.BookRepository
 
-class GetBookByIdUseCase() {
+class GetBookByIdUseCase(provideRepository: BookRepository) {
 
     private val repository: BookRepository = BookRepositoryProvider.provideRepository()
     suspend operator fun invoke(id: Int): Book? {
